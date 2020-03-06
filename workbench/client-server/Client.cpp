@@ -12,8 +12,11 @@ Client::Client(sf::TcpSocket *socket_new)
 
 Client::~Client(void)
 {
-	thread_rcv.terminate();
-	thread_snd.terminate();
+	socket->disconnect();
+	socket->setBlocking(false);
+	thread_rcv.wait();
+	thread_snd.wait();
+	delete socket;
 }
 
 //===============================================================
@@ -26,21 +29,13 @@ void Client::rcv_queue(void)
 {
 	sf::Packet packet;
 	while (1) {
-// 		std::cout << "THRD: Waiting for a packet" << std::endl;
-		
-		if (sf::Socket::Disconnected == socket->receive(packet)) {
+		if (sf::Socket::Done != socket->receive(packet)) {
 			connected = false;
 			return;
 		}
 		
 		sf::Lock lock(mutex_rcv);
 		queue_rcv.push(packet);
-		unread = true;
-		
-		
-// 		std::string message;
-// 		packet >> message;
-// 		std::cout << "THRD: New message: " << message << std::endl;
 	}
 }
 
@@ -54,16 +49,6 @@ void Client::receive(sf::Packet &packet)
 	sf::Lock lock(mutex_rcv);
 	packet = queue_rcv.front();
 	queue_rcv.pop();
-	unread = queue_rcv.empty();
-}
-
-sf::Packet Client::receive_2(void)
-{
-	sf::Lock lock(mutex_rcv);
-	sf::Packet packet = queue_rcv.front();
-	queue_rcv.pop();
-	unread = queue_rcv.empty();
-	return packet;
 }
 
 //===============================================================
@@ -71,7 +56,7 @@ sf::Packet Client::receive_2(void)
 void Client::snd_queue(void)
 {
 	while (!queue_snd.empty()) {
-		if (sf::Socket::Disconnected == socket->send(queue_snd.front())) {
+		if (sf::Socket::Done != socket->send(queue_snd.front())) {
 			connected = false;
 			return;
 		}
@@ -85,6 +70,19 @@ void Client::send(sf::Packet const &packet)
 {
 	sf::Lock lock(mutex_snd);
 	queue_snd.push(packet);
-	if (1 == queue_snd.size())
+	if (1 == queue_snd.size()) {
 		thread_snd.launch();
+	}
+}
+
+//===============================================================
+
+bool Client::isUnread(void) const
+{
+	return !queue_rcv.empty();
+}
+
+bool Client::isConnected(void) const
+{
+	return connected;
 }

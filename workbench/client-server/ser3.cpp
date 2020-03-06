@@ -42,6 +42,8 @@ int main()
 			}
 		}
 		
+break;
+		
 		std::string message;
 		std::cin >> message;
 		sf::Packet packet;
@@ -50,5 +52,13 @@ int main()
 			it->send(packet);
 		}
 	}
+	
+	
+	std::cout << "Disconnecting..." << std::endl;
+	for (int i = 0; i < clients.size(); ++i) {
+		delete clients[i];
+		std::cout << i << std::endl;
+	}
+	delete p_socket;
 	return 0;
 }
