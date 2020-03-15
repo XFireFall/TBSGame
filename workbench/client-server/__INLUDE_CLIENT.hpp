@@ -22,5 +22,5 @@ public:
 	void send_feed((sf::Vector2u& eater) {}
 	void send_ack(void) {}
 	
-	void update(field_t *field) {}
+	void update(field_t &field) {}
 };
