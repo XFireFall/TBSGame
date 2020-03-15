@@ -19,7 +19,7 @@ int main()
 		if (sf::Socket::Done == listener.accept(*p_socket)) {
 			std::cout << "New client connected: " << p_socket->getRemoteAddress() << std::endl;
 			
-			clients.push_back(new Client(p_socket));
+			clients.push_back(new Client(p_socket, clients.size()));
 			
 			listener.setBlocking(false);
 			p_socket = new sf::TcpSocket;

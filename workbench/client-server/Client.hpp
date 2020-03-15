@@ -13,7 +13,7 @@ private:
 	
 	sf::TcpSocket *socket;
 	bool connected;
-public:
+	
 	sf::Thread thread_rcv, thread_snd;
 	std::queue<sf::Packet> queue_rcv, queue_snd;
 	sf::Mutex mutex_rcv, mutex_snd;
@@ -23,7 +23,7 @@ private:
 	void snd_queue(void);
 	
 public:
-	Client(sf::TcpSocket *socket_new);
+	Client(sf::TcpSocket *socket_new, unsigned int player_id_new);
 	~Client(void);
 	
 	void send(sf::Packet const &packet);

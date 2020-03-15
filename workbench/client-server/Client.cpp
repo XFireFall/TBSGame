@@ -1,10 +1,12 @@
 #include "Client.hpp"
 
-Client::Client(sf::TcpSocket *socket_new)
-	: socket(socket_new)
+Client::Client(sf::TcpSocket *socket_new, unsigned int player_id_new)
+	: player_id(player_id_new)
+	, nickname("Player")
+	, socket(socket_new)
+	, connected(true)
 	, thread_rcv(&Client::rcv_queue, this)
 	, thread_snd(&Client::snd_queue, this)
-	, connected(true)
 {
 	socket->setBlocking(true);
 	thread_rcv.launch();
@@ -42,11 +44,13 @@ void Client::rcv_queue(void)
 /*
  * Returns an appropriate packet from the incoming queue
  * It may block for a little if there's a packet being received
- * If the queue is empty the exception is thrown, so check if there are incoming packets before calling this
+ * If the queue is empty the packet is left untouched, so check if there are incoming packets before calling
  */
 void Client::receive(sf::Packet &packet)
 {
 	sf::Lock lock(mutex_rcv);
+	if (queue_rcv.empty())
+		return;
 	packet = queue_rcv.front();
 	queue_rcv.pop();
 }
@@ -70,9 +74,8 @@ void Client::send(sf::Packet const &packet)
 {
 	sf::Lock lock(mutex_snd);
 	queue_snd.push(packet);
-	if (1 == queue_snd.size()) {
+	if (1 == queue_snd.size())
 		thread_snd.launch();
-	}
 }
 
 //===============================================================
