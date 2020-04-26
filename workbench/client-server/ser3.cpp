@@ -2,66 +2,9 @@
 #include <vector>
 #include <queue>
 #include <SFML/Network.hpp>
+#include <SFML/System.hpp>
 
-class Client {
-private:
-	unsigned int player_id;
-	std::string nickname;
-	sf::TcpSocket *socket;
-	sf::Thread thread_rcv, thread_snd;
-	std::queue<sf::Packet> msq_rcv, msq_snd;
-	bool isSending;
-	
-private:
-	void rcv_queue(void);
-	void snd_queue(void);
-	
-public:
-	Client(sf::TcpSocket *socket_new);
-	~Client(void);
-	
-	void send(sf::Packet const &msg);
-	sf::Packet& receive(void);
-};
-
-Client::Client(sf::TcpSocket *socket_new)
-	: socket(socket_new)
-	, thread_rcv(&Client::rcv_queue, this)
-	, thread_snd(&Client::snd_queue, this)
-{
-	socket->setBlocking(true);
-	thread_rcv.launch();
-}
-
-Client::~Client(void)
-{
-	thread_rcv.terminate();
-	thread_snd.terminate();
-}
-
-void Client::rcv_queue(void)
-{
-	sf::Packet packet;
-	while (1) {
-		std::cout << "Waiting for a packet" << std::endl;
-		socket->receive(packet);
-		msq_rcv.push(packet);
-		
-		std::string message;
-		packet >> message;
-		std::cout << message << std::endl;
-	}
-}
-
-void Client::snd_queue(void)
-{
-	sf::Packet packet;
-	while (!msq_snd.empty()) {
-		socket->send(msq_snd.front());
-		msq_snd.pop();
-	}
-	isSending = false;
-}
+#include "Client.hpp"
 
 int main()
 {
@@ -76,11 +19,46 @@ int main()
 		if (sf::Socket::Done == listener.accept(*p_socket)) {
 			std::cout << "New client connected: " << p_socket->getRemoteAddress() << std::endl;
 			
-			clients.push_back(new Client(p_socket));
+			clients.push_back(new Client(p_socket, clients.size()));
 			
 			listener.setBlocking(false);
 			p_socket = new sf::TcpSocket;
 		}
+		
+		/*if (clients[0]->isUnread()) {
+			sf::Packet packet;
+			std::string message;
+			clients[0]->receive(packet);
+			packet >> message;
+			std::cout << message << std::endl;
+		}*/
+		
+		for (int i = 0; i < clients.size(); ++i) {
+			if (!clients[i]->isConnected()) {
+				delete clients[i];
+				clients.erase(clients.begin() + i);
+				i--;
+				std::cout << "Disconnected :^(" << std::endl;
+			}
+		}
+		
+break;
+		
+		std::string message;
+		std::cin >> message;
+		sf::Packet packet;
+		packet << message;
+		for (auto it: clients) {
+			it->send(packet);
+		}
 	}
+	
+	
+	std::cout << "Disconnecting..." << std::endl;
+	for (int i = 0; i < clients.size(); ++i) {
+		delete clients[i];
+		std::cout << i << std::endl;
+	}
+	delete p_socket;
 	return 0;
 }
