@@ -248,14 +248,14 @@ std::vector<sf::Vector2u> Field::discard(uint16_t owner)
 sf::Vector2u Field::nest(uint16_t owner)
 {
 	sf::Vector2u v{0, 0};
-// 		if (at(v).empty()) { at(v).init(owner); return v; }
-// 	v = sf::Vector2u{0, (unsigned int)width()-1};
-// 		if (at(v).empty()) { at(v).init(owner); return v; }
-// 	v = sf::Vector2u{(unsigned int)height()-1, 0};
-// 		if (at(v).empty()) { at(v).init(owner); return v; }
-// 	v = sf::Vector2u{(unsigned int)height()-1, (unsigned int)width()-1};
-// 		if (at(v).empty()) { at(v).init(owner); return v; }
-// 	
+		if (at(v).empty()) { at(v).init(owner); return v; }
+	v = sf::Vector2u{0, (unsigned int)width()-1};
+		if (at(v).empty()) { at(v).init(owner); return v; }
+	v = sf::Vector2u{(unsigned int)height()-1, 0};
+		if (at(v).empty()) { at(v).init(owner); return v; }
+	v = sf::Vector2u{(unsigned int)height()-1, (unsigned int)width()-1};
+		if (at(v).empty()) { at(v).init(owner); return v; }
+	
 	v = sf::Vector2u{0, 0};
 	for ( ; v.y < height(); ++v.y)
 		for (v.x = 0; v.x < width(); ++v.x)
