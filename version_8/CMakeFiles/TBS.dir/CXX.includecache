@@ -1,0 +1,68 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/yura/Рабочий стол/game/version_8/Lib/backend/Client.cpp
+Client.hpp
+/home/yura/Рабочий стол/game/version_8/Lib/backend/Client.hpp
+../primitives/Prim_network.hpp
+/home/yura/Рабочий стол/game/version_8/Lib/primitives/Prim_network.hpp
+../primitives/Prim_system.hpp
+/home/yura/Рабочий стол/game/version_8/Lib/primitives/Prim_system.hpp
+
+/home/yura/Рабочий стол/game/version_8/Lib/backend/Client.hpp
+iostream
+-
+vector
+-
+queue
+-
+../primitives/Prim_game.hpp
+/home/yura/Рабочий стол/game/version_8/Lib/primitives/Prim_game.hpp
+../primitives/Prim_network.hpp
+/home/yura/Рабочий стол/game/version_8/Lib/primitives/Prim_network.hpp
+
+/home/yura/Рабочий стол/game/version_8/Lib/primitives/Prim_common.hpp
+SFML/Graphics.hpp
+-
+vector
+-
+iostream
+-
+
+/home/yura/Рабочий стол/game/version_8/Lib/primitives/Prim_game.hpp
+iostream
+-
+vector
+-
+Prim_common.hpp
+/home/yura/Рабочий стол/game/version_8/Lib/primitives/Prim_common.hpp
+
+/home/yura/Рабочий стол/game/version_8/Lib/primitives/Prim_network.hpp
+SFML/Network.hpp
+-
+vector
+-
+iostream
+-
+Prim_common.hpp
+/home/yura/Рабочий стол/game/version_8/Lib/primitives/Prim_common.hpp
+
+/home/yura/Рабочий стол/game/version_8/Lib/primitives/Prim_system.hpp
+SFML/System.hpp
+-
+sys/types.h
+-
+sys/sem.h
+-
+unistd.h
+-
+stdio.h
+-
+Prim_common.hpp
+/home/yura/Рабочий стол/game/version_8/Lib/primitives/Prim_common.hpp
+

@@ -1,0 +1,5 @@
+/home/yura/Рабочий стол/game/version_8/CMakeFiles/edit_cache.dir
+/home/yura/Рабочий стол/game/version_8/CMakeFiles/host.dir
+/home/yura/Рабочий стол/game/version_8/CMakeFiles/TBS.dir
+/home/yura/Рабочий стол/game/version_8/CMakeFiles/rebuild_cache.dir
+/home/yura/Рабочий стол/game/version_8/CMakeFiles/TBS-console.dir
